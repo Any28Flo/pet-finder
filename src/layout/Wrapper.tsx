@@ -1,7 +1,6 @@
 import {  Outlet } from 'react-router-dom';
 
 import { styled } from 'styled-components'
-import Header from './Header';
 
 const StyledWrapper = styled.div`
     background-color : #FCFAF9;
@@ -9,9 +8,7 @@ const StyledWrapper = styled.div`
     height: 100vh;
 `;
 
-type WrapperProps = {
-  children: React.ReactNode
-}
+
 const Wrapper = () => {
   return (
     <StyledWrapper>
@@ -26,8 +23,6 @@ const Wrapper = () => {
                 src="https://api.dicebear.com/7.x/thumbs/svg?seed=Midnight"
                   alt="avatar" />
           </div>
-          
-
         </>
      </header>
       <Outlet />

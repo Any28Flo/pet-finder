@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 import App from './App.tsx'
 import './index.css'
+import { AppProvider } from './context/appContext.tsx';
 
 const queryClient = new QueryClient();
 
@@ -13,9 +14,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
 				<QueryClientProvider client={queryClient}>
-					
+					<AppProvider>
 						<App />
-					
+					</AppProvider>
 				</QueryClientProvider>
 			</BrowserRouter>
 
