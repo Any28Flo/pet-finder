@@ -1,4 +1,6 @@
+import React, { useState } from "react";
 import styled from "styled-components";
+import { UserBase } from "../types";
 
 const LoginWrapper = styled.main`
     height: 100vh;
@@ -15,22 +17,54 @@ const FormWrapper = styled.form`
   flex-direction: column;
   background-color: red;
 `;
+const initState={
+  name: "",
+  email: ""
+}
 
 const Login = () => {
+
+  const [formState, setFormState] = useState<UserBase>(initState);
+  
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormState(initState);
+    console.log(formState)
+  }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
+
   return (
     <LoginWrapper>
-      <FormWrapper>
+      <FormWrapper onSubmit={handleSubmit}>
           <legend>Log In</legend>
             <div className="form-group">
               <label htmlFor="name">Name:</label>
-              <input type="text" name="name" id="name" />
+              <input 
+                type="text" 
+                name="name" 
+                id="name"
+                value={formState.name}
+                onChange={handleChange}
+                 />
             </div>
             <div className="form-group">
               <label htmlFor="email">Email:</label>
-              <input type="email" name="email" id="email" />
+              <input 
+              
+                type="email"
+                name="email"
+                id="email"
+                value={formState.email}
+                onChange={handleChange}
+                 />
             </div>
           <button type="submit">Login</button>
-     
       </FormWrapper>
     </LoginWrapper>
   )
