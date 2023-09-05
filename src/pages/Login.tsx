@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { UserBase } from "../types";
+import { MessageStatus, UserBase } from "../types";
+import Message from "../components/Message";
+import Form from '../components/Form';
 
 const LoginWrapper = styled.main`
     height: 100vh;
@@ -10,13 +12,7 @@ const LoginWrapper = styled.main`
     align-items: center;
     justify-content: center;
 `;
-const FormWrapper = styled.form`
-  margin: 6rem;
-  padding:10rem;
-  display: flex;
-  flex-direction: column;
-  background-color: red;
-`;
+
 const initState={
   name: "",
   email: ""
@@ -25,11 +21,18 @@ const initState={
 const Login = () => {
 
   const [formState, setFormState] = useState<UserBase>(initState);
-  
+  const [error, setError] = useState<string>("");
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    
+    if(formState.name === "" || formState.email === ""){
+      setError("Please fill out all fields");
+      return;
+    }
     setFormState(initState);
-    console.log(formState)
+   
   }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,31 +44,12 @@ const Login = () => {
 
   return (
     <LoginWrapper>
-      <FormWrapper onSubmit={handleSubmit}>
-          <legend>Log In</legend>
-            <div className="form-group">
-              <label htmlFor="name">Name:</label>
-              <input 
-                type="text" 
-                name="name" 
-                id="name"
-                value={formState.name}
-                onChange={handleChange}
-                 />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email:</label>
-              <input 
-              
-                type="email"
-                name="email"
-                id="email"
-                value={formState.email}
-                onChange={handleChange}
-                 />
-            </div>
-          <button type="submit">Login</button>
-      </FormWrapper>
+      <Form
+        handleSubmit={handleSubmit}
+        handleChange={handleChange}
+        formState={formState}
+        error={error}
+       />
     </LoginWrapper>
   )
 }
