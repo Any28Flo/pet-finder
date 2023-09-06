@@ -3,7 +3,7 @@ import React from 'react'
 interface FormBreedsProps {
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    breeds: string[];
+    breeds?: string[];
     selectedBreeds: string[];
 }
 const FormBreeds = ({handleSubmit, breeds,selectedBreeds, handleChange}:FormBreedsProps) => {
@@ -12,7 +12,7 @@ const FormBreeds = ({handleSubmit, breeds,selectedBreeds, handleChange}:FormBree
          <form onSubmit={handleSubmit}>
             <legend>What is your favorite breed?</legend>
             {
-                breeds.map((breed, index) =>{
+                breeds?.map((breed, index) =>{
                     return( 
                     <label key={`breed-${index}`}>
 

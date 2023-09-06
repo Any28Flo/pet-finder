@@ -13,8 +13,8 @@ import { useAppContext } from '../context';
 
 const SearchBreed = () => {
 
-    const { breeds, dispatch } = useAppContext();
-    const [selectedBreeds, setSelectedBreeds] = useState<string[]>([])
+   const { breeds, dispatch } = useAppContext();
+   const [selectedBreeds, setSelectedBreeds] = useState<string[]>([])
    const [currentPage, setCurrentPage] = useState(1);
    const [postsPerPage] = useState(15);
  
@@ -81,9 +81,7 @@ const SearchBreed = () => {
     }
 
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = async(e) => {
-        e.preventDefault();
-        console.log(selectedBreeds);
-       
+        e.preventDefault();       
           setIsLoading(true)
           try {
             const response = await getDataWithHeaders(`/dogs/search?breeds=${selectedBreeds}`);
@@ -100,6 +98,7 @@ const SearchBreed = () => {
             setError( error);
           }
     }
+
     const previousPage = () => {
         if (currentPage !== 1) {
            setCurrentPage(currentPage - 1);
@@ -120,7 +119,7 @@ const SearchBreed = () => {
            {
             breeds ? 
                 <div className="breed-list">
-                    {currentPosts?.map((breed) => (<li>{breed}</li>))}
+                    {<FormBreeds handleSubmit={handleSubmit} handleChange={handleChange} breeds={currentPosts} selectedBreeds={selectedBreeds}/>}
                     <Paginate
                     postsPerPage={postsPerPage}
                     totalPosts={breeds.length}
