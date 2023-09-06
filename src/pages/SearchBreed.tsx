@@ -7,6 +7,7 @@ import Spinner from "../components/Spinner";
 import { getDataWithHeaders } from '../db/fetchRewardMethods';
 import Message from '../components/Message';
 import { MessageStatus } from '../types';
+import Paginator from '../components/Paginator';
 
 const opt = [
     "Affenpinscher",
@@ -32,7 +33,7 @@ const SearchBreed = () => {
             if(response){
                 setIsLoading(false)
 
-                setBreeds(response);
+                //setBreeds(response);
             }
         } catch (error){
             setIsLoading(false)
@@ -88,6 +89,10 @@ const SearchBreed = () => {
             {
                 error &&  Message({typeMessage: MessageStatus.Error, message: error}) 
             }
+            {
+                <Paginator totalItems={10} currentPage={1} itemsPerPage={5}/>
+            }
+
         </div>
     )
 }
