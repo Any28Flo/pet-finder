@@ -16,7 +16,7 @@ const App = () => {
         <Route index element={<Login />} />
         <Route element={<RequireAuth/>}>
           <Route path='/search-breed' element={< SearchBreed/>} />
-          <Route path='/search' element={<Search />} />
+          <Route path='/results' element={<Search />} />
           <Route path='*' element={<Navigate to='/search' />}></Route>
         </Route>
       </Routes>

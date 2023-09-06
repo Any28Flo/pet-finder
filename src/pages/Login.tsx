@@ -55,7 +55,7 @@ const Login = () => {
           type: "login",
           payload: {user:formState}
         })
-        navigate("/search");
+        navigate("/search-breed");
       }
     } catch (error){
       setIsLoading(false)

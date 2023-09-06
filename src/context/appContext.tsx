@@ -1,26 +1,12 @@
 import { createContext, useReducer, ReactNode } from 'react';
-import { UserBase } from '../types';
+import { State , Action, Props} from '../types/typeContext';
 
 
-interface State  {
-	user?: UserBase | null;
-	dogs? : []
-	
-}
 const initialState: State = {
 	user:{name:"Batman", email:"batna"},
 	dogs: [],
+	breeds:[]
 };
-
-type Action =
-
-	| {
-		type: 'login';
-		payload: State;
-	}
-	| {
-		type: 'logout';
-	}
 
 
 
@@ -34,19 +20,13 @@ function reducer(state: State, action: Action): State {
 			return state;
 	}
 }
-type AppContextType = State & {
-	dispatch: React.Dispatch<Action>;
-};
 
-type Props = {
-	children: ReactNode;
-};
 export function AppProvider({ children }: Props) {
 
-	const [{ user,dogs }, dispatch] = useReducer(reducer, initialState);
+	const [{ user,dogs,breeds }, dispatch] = useReducer(reducer, initialState);
 
 	return (
-		<AppContext.Provider value={{ user,dogs, dispatch }} >
+		<AppContext.Provider value={{ user,dogs,breeds, dispatch }} >
 			{children}
 		</AppContext.Provider>
 	);
