@@ -14,7 +14,7 @@ const App = () => {
        <Routes>
         <Route index element={<Login />} />
         <Route element={<Wrapper />}>
-          <Route path='search' element={<Search />} />
+          <Route path='/search' element={<Search />} />
           <Route path='*' element={<Navigate to='/' />}></Route>
         </Route>
       </Routes>

@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import { MessageStatus, UserBase } from "../types";
-import Message from "../components/Message";
+import { useNavigate } from 'react-router-dom';
+
 import Form from '../components/Form';
+
+import styled from "styled-components";
+
+import { UserBase } from "../types";
+import { login } from "../db/authMethods";
+import Spinner from "../components/Spinner";
+
+
+
 
 const LoginWrapper = styled.main`
     height: 100vh;
@@ -22,8 +30,11 @@ const Login = () => {
 
   const [formState, setFormState] = useState<UserBase>(initState);
   const [error, setError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+ 
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     
@@ -31,8 +42,19 @@ const Login = () => {
       setError("Please fill out all fields");
       return;
     }
-    setFormState(initState);
-   
+    setIsLoading(true)
+    try {
+      const response = await login(formState);
+      
+      if(response){
+        setIsLoading(false)
+        setFormState(initState);
+        navigate("/search");
+      }
+    } catch (error){
+      setIsLoading(false)
+      setError( error);
+    }
   }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,7 +63,8 @@ const Login = () => {
       [name]: value,
     }));
   }
-
+  if(isLoading) return <Spinner />
+  
   return (
     <LoginWrapper>
       <Form
@@ -50,6 +73,7 @@ const Login = () => {
         formState={formState}
         error={error}
        />
+      
     </LoginWrapper>
   )
 }
