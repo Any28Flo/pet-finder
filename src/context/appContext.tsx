@@ -4,11 +4,13 @@ import { UserBase } from '../types';
 
 interface State  {
 	user?: UserBase | null;
+	dogs : []
 	
 }
 const initialState: State = {
-	user:null
-	};
+	user:null,
+	dogs: [],
+};
 
 type Action =
 
@@ -27,7 +29,7 @@ function reducer(state: State, action: Action): State {
 		case 'login':
             return {...state, user: action.payload.user}
 		case 'logout':
-          return state
+          return {...initialState}
 		default:
 			return state;
 	}
@@ -41,10 +43,10 @@ type Props = {
 };
 export function AppProvider({ children }: Props) {
 
-	const [{ user }, dispatch] = useReducer(reducer, initialState);
+	const [{ user,dogs }, dispatch] = useReducer(reducer, initialState);
 
 	return (
-		<AppContext.Provider value={{ user, dispatch }} >
+		<AppContext.Provider value={{ user,dogs, dispatch }} >
 			{children}
 		</AppContext.Provider>
 	);
