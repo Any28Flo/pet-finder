@@ -1,12 +1,11 @@
-import { createContext, useContext, useReducer, ReactNode } from 'react';
-import { User } from '../types';
+import { createContext, useReducer, ReactNode } from 'react';
+import { UserBase } from '../types';
 
 
-type State = {
-	user?: User | null;
+interface State  {
+	user?: UserBase | null;
 	
-};
-
+}
 const initialState: State = {
 	user:null
 	};

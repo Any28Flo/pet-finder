@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import Wrapper from './layout/Wrapper';
+import RequireAuth from './components/RequireAuth';
 
 
 const Login = lazy(() => import('./pages/Login'));
@@ -13,7 +14,7 @@ const App = () => {
     <Suspense fallback={<h1>Cargando...</h1>}>
        <Routes>
         <Route index element={<Login />} />
-        <Route element={<Wrapper />}>
+        <Route element={<RequireAuth/>}>
           <Route path='/search' element={<Search />} />
           <Route path='*' element={<Navigate to='/' />}></Route>
         </Route>

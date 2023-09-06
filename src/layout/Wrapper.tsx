@@ -8,8 +8,10 @@ const StyledWrapper = styled.div`
     height: 100vh;
 `;
 
-
-const Wrapper = () => {
+interface WrapperProps {
+  children: React.ReactNode
+}
+const Wrapper = ({children}:WrapperProps) => {
   return (
     <StyledWrapper>
      <header>
@@ -25,7 +27,7 @@ const Wrapper = () => {
           </div>
         </>
      </header>
-      <Outlet />
+      {children}
     </StyledWrapper>
   )
 }
