@@ -10,6 +10,10 @@ export type Action =
 	| {
 		type: 'logout';
 	}
+	| {
+		type: 'setBreeds';
+		payload: State;
+	}
 
 export type AppContextType = State & {
         dispatch: React.Dispatch<Action>;

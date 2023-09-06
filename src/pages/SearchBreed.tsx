@@ -3,27 +3,40 @@ import { useNavigate } from 'react-router-dom';
 
 import FormBreeds from '../components/FormBreeds';
 import Spinner from "../components/Spinner";
+import Paginate from '../components/Paginate';
+import Message from '../components/Message';
 
 import { getDataWithHeaders } from '../db/fetchRewardMethods';
-import Message from '../components/Message';
 import { MessageStatus } from '../types';
-import Paginator from '../components/Paginator';
+import { useAppContext } from '../context';
 
-const opt = [
-    "Affenpinscher",
-    "Afghan Hound",
-    "African Hunting Dog",
-    "Airedale",
-]
+
 const SearchBreed = () => {
-    const [selectedBreeds, setSelectedBreeds] = useState<string[]>([]);
-    const [breeds, setBreeds] = useState(opt);
+
+    const { breeds, dispatch } = useAppContext();
+    const [selectedBreeds, setSelectedBreeds] = useState<string[]>([])
+   const [currentPage, setCurrentPage] = useState(1);
+   const [postsPerPage] = useState(15);
+ 
+ 
+   const indexOfLastPost = currentPage * postsPerPage;
+   const indexOfFirstPost = indexOfLastPost - postsPerPage;
+   const currentPosts = breeds?.slice(indexOfFirstPost, indexOfLastPost);
+ 
     const [error, setError] = useState<string>("");
 
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+  
+    const paginate = (selected) => {
+        console.log(selected);
+        
+      setCurrentPage(selected + 1);
+    };
 
-    const getBreeds = async () =>{
+
+
+    const getBreeds = async() =>{
         setIsLoading(true)
 
         try {
@@ -33,7 +46,12 @@ const SearchBreed = () => {
             if(response){
                 setIsLoading(false)
 
-                //setBreeds(response);
+                dispatch({
+                    type: "setBreeds",
+                    payload: {breeds:response}
+                })
+
+                
             }
         } catch (error){
             setIsLoading(false)
@@ -44,16 +62,21 @@ const SearchBreed = () => {
 
     useEffect(() => {
         getBreeds();
+      
     },[]);
 
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
 
-        const optionValue = event.target?.value
+        const optionValue = event.target?.value;
+        console.log(optionValue)
 
         if (!selectedBreeds.includes(optionValue)) {
-            setSelectedBreeds([...selectedBreeds, optionValue]);
+         console.log("1")
+         setSelectedBreeds([...selectedBreeds, optionValue])
+          //  setSelectedBreeds([...selectedBreeds, optionValue]);
         } else {
-            setSelectedBreeds(selectedBreeds.filter((option) => option !== optionValue));
+            console.log
+            //setSelectedBreeds(selectedBreeds.filter((option) => option !== optionValue));
         }
     }
 
@@ -67,33 +90,57 @@ const SearchBreed = () => {
             
             if(response){
               setIsLoading(false)
-              console.log(response)
+            
            
               navigate("/results");
             }
+
           } catch (error){
             setIsLoading(false)
             setError( error);
           }
     }
+    const previousPage = () => {
+        if (currentPage !== 1) {
+           setCurrentPage(currentPage - 1);
+        }
+     };
+   
+     const nextPage = () => {
+        if (currentPage !== Math.ceil(breeds?.length / postsPerPage)) {
+           setCurrentPage(currentPage + 1);
+        }
+     };
+   
+
     if(isLoading) return <Spinner />
-  
+    
     return (
         <div>
-            <FormBreeds
-                handleSubmit={handleSubmit}
-                handleChange={handleChange}
-                breeds={breeds}
-                selectedBreeds={selectedBreeds}
-            />
+           {
+            breeds ? 
+                <div className="breed-list">
+                    {currentPosts?.map((breed) => (<li>{breed}</li>))}
+                    <Paginate
+                    postsPerPage={postsPerPage}
+                    totalPosts={breeds.length}
+                    paginate={paginate}
+
+                  previousPage={previousPage}
+                  nextPage={nextPage}
+               />
+                </div>
+                : 
+                <div className="loading">Loading...</div>
+             
+           }
+           
             {
                 error &&  Message({typeMessage: MessageStatus.Error, message: error}) 
             }
-            {
-                <Paginator totalItems={10} currentPage={1} itemsPerPage={5}/>
-            }
 
         </div>
+
     )
 }
 

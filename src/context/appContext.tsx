@@ -1,5 +1,5 @@
-import { createContext, useReducer, ReactNode } from 'react';
-import { State , Action, Props} from '../types/typeContext';
+import { createContext, useReducer } from 'react';
+import { State , Action, Props, AppContextType} from '../types/typeContext';
 
 
 const initialState: State = {
@@ -13,9 +13,11 @@ const initialState: State = {
 function reducer(state: State, action: Action): State {
 	switch (action.type) {
 		case 'login':
-            return {...state, user: action.payload.user}
+            return {...state, user: action.payload.user, breeds:[]}
 		case 'logout':
           return {...initialState}
+		case 'setBreeds':
+			return {...state, breeds: action.payload.breeds }
 		default:
 			return state;
 	}
