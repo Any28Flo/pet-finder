@@ -4,7 +4,7 @@ import { UserBase } from '../types';
 
 interface State  {
 	user?: UserBase | null;
-	dogs : []
+	dogs? : []
 	
 }
 const initialState: State = {

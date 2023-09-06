@@ -6,9 +6,9 @@ import Form from '../components/Form';
 import styled from "styled-components";
 
 import { UserBase } from "../types";
-import { login } from "../db/authMethods";
 import Spinner from "../components/Spinner";
 import { useAppContext } from "../context";
+import { login } from "../db/fetchRewardMethods";
 
 
 
