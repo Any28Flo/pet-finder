@@ -8,7 +8,7 @@ interface State  {
 	
 }
 const initialState: State = {
-	user:null,
+	user:{name:"Batman", email:"batna"},
 	dogs: [],
 };
 
