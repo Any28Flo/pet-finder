@@ -6,8 +6,9 @@ import Form from '../components/Form';
 import styled from "styled-components";
 
 import { UserBase } from "../types";
-import { login } from "../db/authMethods";
 import Spinner from "../components/Spinner";
+import { useAppContext } from "../context";
+import { login } from "../db/fetchRewardMethods";
 
 
 
@@ -33,7 +34,8 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
- 
+  const { dispatch } = useAppContext();
+
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -49,6 +51,10 @@ const Login = () => {
       if(response){
         setIsLoading(false)
         setFormState(initState);
+        dispatch({
+          type: "login",
+          payload: {user:formState}
+        })
         navigate("/search");
       }
     } catch (error){
@@ -79,3 +85,4 @@ const Login = () => {
 }
 
 export default Login
+
