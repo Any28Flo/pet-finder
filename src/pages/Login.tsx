@@ -9,6 +9,7 @@ import { UserBase } from "../types";
 import Spinner from "../components/Spinner";
 import { useAppContext } from "../context";
 import { login } from "../db/fetchRewardMethods";
+import { Types } from "../context/userReducer";
 
 
 
@@ -52,8 +53,8 @@ const Login = () => {
         setIsLoading(false)
         setFormState(initState);
         dispatch({
-          type: "login",
-          payload: {user:formState}
+          type: Types.LOGIN,
+          payload: {name: formState.name, email:formState.email}
         })
         navigate("/search-breed");
       }

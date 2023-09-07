@@ -1,40 +1,51 @@
-import { createContext, useReducer } from 'react';
-import { State , Action, Props, AppContextType} from '../types/typeContext';
+import { createContext, useReducer, Dispatch } from "react";
+import userReducer, { UserActions } from './userReducer';
+import dogsReducer, { DogsActions } from "./dogsReducer";
+import breedsReducer, { BreedsActions } from "./breedsReducer";
+import selectedBreedReducer, { SelectedBreedsActions } from "./selectedBreeds";
+import { Props } from "../types/typeContext";
 
 
-const initialState: State = {
-	user:{name:"Batman", email:"batna"},
-	dogs: [],
-	breeds:[]
-};
-
-
-
-function reducer(state: State, action: Action): State {
-	switch (action.type) {
-		case 'login':
-            return {...state, user: action.payload.user, breeds:[]}
-		case 'logout':
-          return {...initialState}
-		case 'setBreeds':
-			return {...state, breeds: action.payload.breeds }
-		default:
-			return state;
-	}
+export type InitialStateType = {
+	user: null,
+	// dogs: string[],
+	// breeds: string[],
+	// selectedBreeds: string[],
 }
 
-export function AppProvider({ children }: Props) {
+const initialState = {
+	user: null,
+	// dogs: [],
+	// breeds: [],
+	// selectedBreeds: [],
+};
+const AppContext = createContext<{
+	state: InitialStateType;
+	dispatch: Dispatch<UserActions>;
+  }>({
+	state: initialState,
+	dispatch: () => null
+  });
+  
+const mainReducer = (
+	//{ user,dogs,breeds, selectedBreeds }: InitialStateType,
+	{ user }: InitialStateType,
 
-	const [{ user,dogs,breeds }, dispatch] = useReducer(reducer, initialState);
+	action: UserActions 
+) => ({
+	user: userReducer(user, action),
+	// dogs: dogsReducer(dogs, action),
+	// breeds: breedsReducer(breeds, action),
+	// selectedBreeds: selectedBreedReducer(selectedBreeds, action),
+})
+
+const AppProvider = ({ children }: Props) => {
+	const [state, dispatch] = useReducer(mainReducer, initialState);
 
 	return (
-		<AppContext.Provider value={{ user,dogs,breeds, dispatch }} >
+		<AppContext.Provider value={{ state, dispatch }}>
 			{children}
 		</AppContext.Provider>
 	);
 }
-
-export const AppContext = createContext<AppContextType>({
-	...initialState,
-	dispatch: () => { },
-});
+export { AppProvider, AppContext };

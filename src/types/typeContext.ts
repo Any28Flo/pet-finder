@@ -14,6 +14,17 @@ export type Action =
 		type: 'setBreeds';
 		payload: State;
 	}
+	| {
+		type: 'setSelectedBreeds';
+		payload: State;
+	}
+export interface State  {
+	user: UserBase | null;
+	breeds: string[];
+	dogs : [];
+	selectedBreeds: string[];
+	
+}
 
 export type AppContextType = State & {
         dispatch: React.Dispatch<Action>;
@@ -23,9 +34,13 @@ export type Props = {
         children: ReactNode;
 };
     
-export interface State  {
-	user?: UserBase | null;
-	breeds?: string[];
-	dogs? : []
-	
-}
+export type ActionMap<M extends { [index: string]: any }> = {
+    [Key in keyof M]: M[Key] extends undefined
+      ? {
+          type: Key;
+        }
+      : {
+          type: Key;
+          payload: M[Key];
+        }
+  };
