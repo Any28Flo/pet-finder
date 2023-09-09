@@ -93,8 +93,6 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
 
         if (response) {
             setIsLoading(false)
-
-
             navigate("/results");
         }
 
@@ -125,12 +123,15 @@ return (
 
             state.breeds.breedsOptions ?
                 <div className="breed-list">
-                    {<FormBreeds handleSubmit={handleSubmit} handleChange={handleChange} breeds={currentPosts} selectedBreeds={state.breeds.selectedBreeds} />}
+                    <FormBreeds 
+                        handleSubmit={handleSubmit} 
+                        handleChange={handleChange} 
+                        breeds={currentPosts} 
+                        selectedBreeds={state.breeds.selectedBreeds} />
                     <Paginate
                         postsPerPage={postsPerPage}
                         totalPosts={state.breeds.breedsOptions.length}
                         paginate={paginate}
-
                         previousPage={previousPage}
                         nextPage={nextPage}
                     />
