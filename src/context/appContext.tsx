@@ -1,58 +1,52 @@
-import { createContext, useReducer, ReactNode } from 'react';
-import { UserBase } from '../types';
+import { createContext, useReducer, Dispatch } from "react";
+import userReducer, { UserActions } from './userReducer';
+import dogsReducer, { DogsActions } from "./dogsReducer";
+import breedsReducer, { BreedsActions } from "./breedsReducer";
+import selectedBreedReducer, { SelectedBreedsActions } from "./selectedBreeds";
+import { Props } from "../types/typeContext";
 
 
-interface State  {
-	user?: UserBase | null;
-	dogs? : []
-	
+export type InitialStateType = {
+	user: null,
+	breeds: {breedsOptions: string[], selectedBreeds:string[]},
+
+	// dogs: string[],
+	// selectedBreeds: string[],
 }
-const initialState: State = {
-	user:null,
-	dogs: [],
+
+const initialState = {
+	user: {name:"erika", email:"batman@gmail.com"},
+	// dogs: [],
+	breeds: {breedsOptions:[],selectedBreeds:[]}
+	// selectedBreeds: [],
 };
+const AppContext = createContext<{
+	state: InitialStateType;
+	dispatch: Dispatch<UserActions | BreedsActions>;
+  }>({
+	state: initialState,
+	dispatch: () => null
+  });
+  
+const mainReducer = (
+	//{ user,dogs,breeds, selectedBreeds }: InitialStateType,
+	{ user,breeds }: InitialStateType,
 
-type Action =
+	action: UserActions | BreedsActions
+) => ({
+	user: userReducer(user, action),
+	breeds: breedsReducer(breeds,action)
+	// dogs: dogsReducer(dogs, action),
+	// selectedBreeds: selectedBreedReducer(selectedBreeds, action),
+})
 
-	| {
-		type: 'login';
-		payload: State;
-	}
-	| {
-		type: 'logout';
-	}
-
-
-
-function reducer(state: State, action: Action): State {
-	switch (action.type) {
-		case 'login':
-            return {...state, user: action.payload.user}
-		case 'logout':
-          return {...initialState}
-		default:
-			return state;
-	}
-}
-type AppContextType = State & {
-	dispatch: React.Dispatch<Action>;
-};
-
-type Props = {
-	children: ReactNode;
-};
-export function AppProvider({ children }: Props) {
-
-	const [{ user,dogs }, dispatch] = useReducer(reducer, initialState);
+const AppProvider = ({ children }: Props) => {
+	const [state, dispatch] = useReducer(mainReducer, initialState);
 
 	return (
-		<AppContext.Provider value={{ user,dogs, dispatch }} >
+		<AppContext.Provider value={{ state, dispatch }}>
 			{children}
 		</AppContext.Provider>
 	);
 }
-
-export const AppContext = createContext<AppContextType>({
-	...initialState,
-	dispatch: () => { },
-});
+export { AppProvider, AppContext };

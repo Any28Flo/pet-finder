@@ -18,11 +18,8 @@ export const getDataWithHeaders = async (endpoint:string) => {
 	try {
 		const response = await api.get(
 			endpoint,
-			{
-				headers: {
-					withCredentials: true
-			}}
-		)
+			
+	)
 		if (response.status === 200) {
 			return response.data;
 		}
