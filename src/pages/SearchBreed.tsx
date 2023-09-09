@@ -10,7 +10,7 @@ import { getDataWithHeaders } from '../db/fetchRewardMethods';
 import { MessageStatus } from '../types';
 import { useAppContext } from '../context';
 import { Types } from '../context/breedsReducer';
-
+import {Types as TypeDogs} from '../context/dogsReducer'
 
 const SearchBreed = () => {
 
@@ -92,7 +92,16 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
         const response = await getDataWithHeaders(`/dogs/search?breeds=${array_to_string(state.breeds.selectedBreeds)}`);
 
         if (response) {
+            console.log(response)
             setIsLoading(false)
+            dispatch({
+                type: TypeDogs.SET_DOGS_IDS,
+                payload:{
+                    dogsIds: response.resultIds,
+                    total:response.total,
+                    nextPage:response.next
+                }
+            })
             navigate("/results");
         }
 
