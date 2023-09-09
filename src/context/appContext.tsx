@@ -8,20 +8,21 @@ import { Props } from "../types/typeContext";
 
 export type InitialStateType = {
 	user: null,
+	breeds: {breedsOptions: string[], selectedBreeds:string[]},
+
 	// dogs: string[],
-	// breeds: string[],
 	// selectedBreeds: string[],
 }
 
 const initialState = {
-	user: null,
+	user: {name:"erika", email:"batman@gmail.com"},
 	// dogs: [],
-	// breeds: [],
+	breeds: {breedsOptions:[],selectedBreeds:[]}
 	// selectedBreeds: [],
 };
 const AppContext = createContext<{
 	state: InitialStateType;
-	dispatch: Dispatch<UserActions>;
+	dispatch: Dispatch<UserActions | BreedsActions>;
   }>({
 	state: initialState,
 	dispatch: () => null
@@ -29,13 +30,13 @@ const AppContext = createContext<{
   
 const mainReducer = (
 	//{ user,dogs,breeds, selectedBreeds }: InitialStateType,
-	{ user }: InitialStateType,
+	{ user,breeds }: InitialStateType,
 
-	action: UserActions 
+	action: UserActions | BreedsActions
 ) => ({
 	user: userReducer(user, action),
+	breeds: breedsReducer(breeds,action)
 	// dogs: dogsReducer(dogs, action),
-	// breeds: breedsReducer(breeds, action),
 	// selectedBreeds: selectedBreedReducer(selectedBreeds, action),
 })
 

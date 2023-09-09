@@ -9,32 +9,30 @@ import Message from '../components/Message';
 import { getDataWithHeaders } from '../db/fetchRewardMethods';
 import { MessageStatus } from '../types';
 import { useAppContext } from '../context';
+import { Types } from '../context/breedsReducer';
 
 
 const SearchBreed = () => {
 
-    const { breeds, selectedBreeds, dispatch } = useAppContext();
-
+    const { state, dispatch } = useAppContext();
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(15);
 
 
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = breeds?.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = state.breeds.breedsOptions.slice(indexOfFirstPost, indexOfLastPost);
 
     const [error, setError] = useState<string>("");
 
     const [isLoading, setIsLoading] = useState(false);
+    
     const navigate = useNavigate();
 
     const paginate = (selected) => {
         console.log(selected);
-
         setCurrentPage(selected + 1);
     };
-
-
 
     const getBreeds = async () => {
         setIsLoading(true)
@@ -47,8 +45,8 @@ const SearchBreed = () => {
                 setIsLoading(false)
 
                 dispatch({
-                    type: "setBreeds",
-                    payload: { breeds: response}
+                    type: Types.SET_BREEDS,
+                    payload: response
                 })
 
 
@@ -70,28 +68,28 @@ const SearchBreed = () => {
         const optionValue = event.target?.value;
         console.log(optionValue)
 
-        if (!selectedBreeds?.includes(optionValue)) {
-            const newArray: string[] = [...selectedBreeds, optionValue]
-            console.log("1")
+        if (!state.breeds.selectedBreeds?.includes(optionValue)) {
             dispatch({
-                type: "setSelectedBreeds",
-                payload: { selectedBreeds: newArray }
+                type: Types.ADD_BREED,
+                payload: {newItem: optionValue} 
             })
-
-
-        //setSelectedBreeds([...selectedBreeds, optionValue])
-        //  setSelectedBreeds([...selectedBreeds, optionValue]);
-    } else {
-        console.log
-        //setSelectedBreeds(selectedBreeds.filter((option) => option !== optionValue));
-    }
+        } else {
+           
+            dispatch({
+                type: Types.REMOVE_BREED,
+                payload: {itemToRemove: optionValue} 
+            })
+        }
 }
+function array_to_string(array: Array<any>): string {
+    return array.join("&");
+  }
 
 const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setIsLoading(true)
     try {
-        const response = await getDataWithHeaders(`/dogs/search?breeds=${selectedBreeds}`);
+        const response = await getDataWithHeaders(`/dogs/search?breeds=${array_to_string(state.breeds.selectedBreeds)}`);
 
         if (response) {
             setIsLoading(false)
@@ -113,7 +111,7 @@ const previousPage = () => {
 };
 
 const nextPage = () => {
-    if (currentPage !== Math.ceil(breeds?.length / postsPerPage)) {
+    if (currentPage !== Math.ceil(state.breeds.breedsOptions?.length / postsPerPage)) {
         setCurrentPage(currentPage + 1);
     }
 };
@@ -124,12 +122,13 @@ if (isLoading) return <Spinner />
 return (
     <div>
         {
-            breeds ?
+
+            state.breeds.breedsOptions ?
                 <div className="breed-list">
-                    {<FormBreeds handleSubmit={handleSubmit} handleChange={handleChange} breeds={currentPosts} selectedBreeds={selectedBreeds} />}
+                    {<FormBreeds handleSubmit={handleSubmit} handleChange={handleChange} breeds={currentPosts} selectedBreeds={state.breeds.selectedBreeds} />}
                     <Paginate
                         postsPerPage={postsPerPage}
-                        totalPosts={breeds.length}
+                        totalPosts={state.breeds.breedsOptions.length}
                         paginate={paginate}
 
                         previousPage={previousPage}
