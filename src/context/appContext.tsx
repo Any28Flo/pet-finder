@@ -9,14 +9,14 @@ import { Props } from "../types/typeContext";
 export type InitialStateType = {
 	user: null,
 	breeds: {breedsOptions: string[], selectedBreeds:string[]},
-	dogs:  null
+	dogs:  {dogs: string[], dogsIds:string[]}
 	// selectedBreeds: string[],
 }
 
 const initialState = {
 	user: null,
 	breeds: {breedsOptions:[],selectedBreeds:[]},
-	dogs: null
+	dogs: {dogs:[], dogsIds:[], }
 	// dogs: [],
 	// selectedBreeds: [],
 };

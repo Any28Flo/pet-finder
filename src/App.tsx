@@ -7,7 +7,7 @@ import SearchBreed from './pages/SearchBreed';
 
 
 const Login = lazy(() => import('./pages/Login'));
-const Search = lazy(() => import('./pages/Search'));
+const Dogs = lazy(() => import('./pages/Dogs'));
 
 const App = () => {
   return (
@@ -16,7 +16,7 @@ const App = () => {
         <Route index element={<Login />} />
         <Route element={<RequireAuth/>}>
           <Route path='/search-breed' element={< SearchBreed/>} />
-          <Route path='/results' element={<Search />} />
+          <Route path='/results' element={<Dogs />} />
           <Route path='*' element={<Navigate to='/search' />}></Route>
         </Route>
       </Routes>

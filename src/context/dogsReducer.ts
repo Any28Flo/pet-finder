@@ -24,7 +24,6 @@ export const dogsReducer = (
 ) => {
         switch (action.type){  
             case Types.SET_DOGS_IDS:
-                console.log(2)
                 return{
                     ...state,
                     dogsIds: action.payload.dogsIds,
