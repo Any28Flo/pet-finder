@@ -66,7 +66,6 @@ const SearchBreed = () => {
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
 
         const optionValue = event.target?.value;
-        console.log(optionValue)
 
         if (!state.breeds.selectedBreeds?.includes(optionValue)) {
             dispatch({
