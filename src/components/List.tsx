@@ -1,5 +1,5 @@
 import { Dog } from "../types"
-import Card from "./Card"
+import Card from "./CardDog"
 
 interface ListPetsProps {
     dogs: Dog[]

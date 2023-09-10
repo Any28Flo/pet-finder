@@ -9,20 +9,20 @@ import { Props } from "../types/typeContext";
 export type InitialStateType = {
 	user: null,
 	breeds: {breedsOptions: string[], selectedBreeds:string[]},
-
-	// dogs: string[],
+	dogs:  {dogs: string[], dogsIds:string[]}
 	// selectedBreeds: string[],
 }
 
 const initialState = {
-	user: {name:"erika", email:"batman@gmail.com"},
+	user: null,
+	breeds: {breedsOptions:[],selectedBreeds:[]},
+	dogs: {dogs:[], dogsIds:[], }
 	// dogs: [],
-	breeds: {breedsOptions:[],selectedBreeds:[]}
 	// selectedBreeds: [],
 };
 const AppContext = createContext<{
 	state: InitialStateType;
-	dispatch: Dispatch<UserActions | BreedsActions>;
+	dispatch: Dispatch<UserActions | BreedsActions | DogsActions>;
   }>({
 	state: initialState,
 	dispatch: () => null
@@ -30,13 +30,12 @@ const AppContext = createContext<{
   
 const mainReducer = (
 	//{ user,dogs,breeds, selectedBreeds }: InitialStateType,
-	{ user,breeds }: InitialStateType,
-
-	action: UserActions | BreedsActions
+	{ user,breeds, dogs }: InitialStateType,
+	action: UserActions | BreedsActions | DogsActions
 ) => ({
 	user: userReducer(user, action),
-	breeds: breedsReducer(breeds,action)
-	// dogs: dogsReducer(dogs, action),
+	breeds: breedsReducer(breeds,action),
+	dogs: dogsReducer(dogs,action),
 	// selectedBreeds: selectedBreedReducer(selectedBreeds, action),
 })
 

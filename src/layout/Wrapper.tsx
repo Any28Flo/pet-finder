@@ -4,7 +4,6 @@ import { styled } from 'styled-components'
 const StyledWrapper = styled.div`
     background-color : #FCFAF9;
     width: 100%;
-    height: 100vh;
     color:black;
 `;
 

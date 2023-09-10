@@ -2,19 +2,34 @@ import { ActionMap } from "../types/typeContext";
 
 
 export enum Types {
-    GET_BREEDS = "GET_BREEDS",   
+    SET_DOGS_IDS = "SET_DOGS_IDS",   
 }
 type DogPayload = {
-    [Types.GET_BREEDS]: {
-        breeds: string[];
+    [Types.SET_DOGS_IDS]: {
+        dogsIds: string[];
+        nextPage : string;
+        total: number;
     };
+}
+type DogsState ={
+    dogsIds: string[];
+    dogs : string[];
+    total: number,
+    next: string
 }
 export type DogsActions = ActionMap<DogPayload>[keyof ActionMap<DogPayload>];
 export const dogsReducer = (
-    state:string[],
+    state:DogsState | null,
     action: DogsActions 
 ) => {
         switch (action.type){  
+            case Types.SET_DOGS_IDS:
+                return{
+                    ...state,
+                    dogsIds: action.payload.dogsIds,
+                    total: action.payload.total,
+                    nextPage:action.payload.nextPage
+                }
             
             default:
             return state;
